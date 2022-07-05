@@ -1,8 +1,10 @@
 # BABEL, WEBPACK, ESLINT - how to configure
 
+---
+
 ## Babel
 
-Let's add Babel to the project. Babel allows us to use the lates ES syntax - it will transpile our code for browsers that do not support new features
+Let's add Babel to the project. Babel allows us to use the latest ES syntax - it will transpile our code for browsers that do not support new features. The official docs can be found [here](https://babeljs.io/docs/en/).
 
 1. We need to create package.json. In your terminal:
 
@@ -15,6 +17,8 @@ Let's add Babel to the project. Babel allows us to use the lates ES syntax - it 
    ```
    npm init -y
    ```
+
+   Side note: do not forget to ==add node_modules to your .gitignore== file before you start to commit!
 
 2. Let's install Babel and Babel CLI
 
@@ -30,7 +34,9 @@ Let's add Babel to the project. Babel allows us to use the lates ES syntax - it 
    npx babel src --out-dir build
    ```
 
-   src - folder where our source files are, build - folder where to put the result files (names are totally up to you)
+   ==src== - folder where our source files are, ==build== - folder where to put the result files (names are totally up to you)
+
+   Further we'll add Webpack to do it for us
 
 4. Let's install preset for all last JS features (env)
 
@@ -97,7 +103,7 @@ Let's add Babel to the project. Babel allows us to use the lates ES syntax - it 
    }
    ```
 
-   Or we can create .browserslist file and put the list of browsers there
+   Or we can create .browserslist file and put the list of browsers there (I like this approach more)
 
    ```
     > 0.5%
@@ -110,7 +116,7 @@ Let's add Babel to the project. Babel allows us to use the lates ES syntax - it 
 
    How to detect if some feature is supported or not? Take a look in [CanIUse](https://caniuse.com/). Just search for a feature and you'll see the browser support
 
-9. Polyfills. Sometimes we want to support not a new feature added to JS, but some feature (for example new method added to Array.prototype). In this case we need a library that provides us such polyfills. Let's install it
+9. Polyfills. Sometimes we want to support not a new syntax added to JS, but some feature (for example new method added to Array.prototype). In this case we need a library that provides us such polyfills. Let's install it
 
    ```
    npm install core-js
@@ -137,6 +143,12 @@ Let's add Babel to the project. Babel allows us to use the lates ES syntax - it 
     }
     ```
 
-    corejs - release version of the library (first number in version)
-    useBuiltIns - with set to "usage", it will add only polyfills for features we are using in our code (based on browser list)
-    modules - by default it will convert all imports to CommonJS syntax (require), but we do not need it, as we will add Webpack soon
+    ==corejs== - release version of the library (first number in version)
+    ==useBuiltIns== - with set to "usage", it will add only polyfills for features we are using in our code (based on browser list)
+    ==modules== - by default it will convert all imports to CommonJS syntax (require), but we do not need it, as we will add Webpack soon
+
+Now we are good to go with Babel. Please note, that there are other presets that allow you to add the support of some other syntax as well (react, for example). You can combine several presets.
+
+---
+
+# Webpack
