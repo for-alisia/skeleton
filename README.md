@@ -2,7 +2,7 @@
 
 ## Babel
 
-Let's add Babel to the project
+Let's add Babel to the project. Babel allows us to use the lates ES syntax - it will transpile our code for browsers that do not support new features
 
 1. We need to create package.json. In your terminal:
 
