@@ -18,15 +18,19 @@ Let's add Babel to the project. Babel allows us to use the latest ES syntax - it
    npm init -y
    ```
 
-   Side note: do not forget to ==add node_modules to your .gitignore== file before you start to commit!
+   Side note: do not forget to <strong>add node_modules to your .gitignore</strong> file before you start to commit!
 
-2. Let's install Babel and Babel CLI
+   </br>
+
+2. Let's install <strong>Babel</strong> and <strong>Babel CLI</strong>
 
    ```
    npm install --save-dev @babel/core @babel/cli
    ```
 
-   --save-dev flag shows that it's a dev-dependency (as a short version we can use -D flag)
+   <code>--save-dev</code> flag shows that it's a dev-dependency (as a short version we can use <code>-D</code> flag)
+
+   </br>
 
 3. If you want to compile:
 
@@ -34,17 +38,27 @@ Let's add Babel to the project. Babel allows us to use the latest ES syntax - it
    npx babel src --out-dir build
    ```
 
-   ==src== - folder where our source files are, ==build== - folder where to put the result files (names are totally up to you)
+   <strong>src</strong> - folder where our source files are, <strong>build</strong> - folder where to put the result files (names are totally up to you)
 
-   Further we'll add Webpack to do it for us
+   </br>
 
-4. Let's install preset for all last JS features (env)
+   <i>Further we'll add Webpack to do it for us</i>
+
+   </br>
+
+4. Let's install preset for all last JS features (<strong>preset-env</strong>)
 
    ```
      npm install -D @babel/preset-env
    ```
 
    You can find docs about this preset [here](https://babeljs.io/docs/en/babel-preset-env)
+
+   </br>
+
+   <i>Presets are like sets of different plugins. For example you can add all plugins one by one, but it's handy to use presets for common purposes</i>
+
+   </br>
 
 5. Let's create .babelrc file - there we keep config for Babel
 
@@ -71,6 +85,8 @@ Let's add Babel to the project. Babel allows us to use the latest ES syntax - it
 
    [Here](https://babeljs.io/docs/en/plugins-list) we can find all available plugins
 
+   </br>
+
 8. To optimize our output file we should specify browsers we want to support (to support all browsers is not nice as our files will be too big)
 
    We can do it in .babelrc this way:
@@ -93,9 +109,11 @@ Let's add Babel to the project. Babel allows us to use the latest ES syntax - it
    }
    ```
 
-   Debug prop will allow you to see all browsers and other details in terminal when you build your app
+   <strong>Debug</strong> prop will allow you to see all browsers and other details in terminal when you build your app
 
-   Or we can add it in package.json (more preferable)
+   </br>
+
+   <strong>Or</strong> we can add it in <strong>package.json</strong> (more preferable)
 
    ```json
    {
@@ -103,7 +121,7 @@ Let's add Babel to the project. Babel allows us to use the latest ES syntax - it
    }
    ```
 
-   Or we can create .browserslist file and put the list of browsers there (I like this approach more)
+   <strong>Or</strong> we can create <strong>.browserslist</strong> file and put the list of browsers there (<i>I like this approach more</i>)
 
    ```
     > 0.5%
@@ -114,15 +132,21 @@ Let's add Babel to the project. Babel allows us to use the latest ES syntax - it
 
    More info about this expressions you can see [on the ifficial page](https://github.com/browserslist/browserslist#query-composition)
 
+   </br>
+
    How to detect if some feature is supported or not? Take a look in [CanIUse](https://caniuse.com/). Just search for a feature and you'll see the browser support
 
-9. Polyfills. Sometimes we want to support not a new syntax added to JS, but some feature (for example new method added to Array.prototype). In this case we need a library that provides us such polyfills. Let's install it
+   </br>
+
+9. <strong>Polyfills</strong>. Sometimes we want to support not a new syntax added to JS, but some feature (for example new method added to Array.prototype). In this case we need a library that provides us such polyfills. Let's install it
 
    ```
    npm install core-js
    ```
 
    Docs for this library can be found [here](https://www.npmjs.com/package/core-js)
+
+   </br>
 
 10. Then we need to change our .babelrc
 
@@ -143,9 +167,9 @@ Let's add Babel to the project. Babel allows us to use the latest ES syntax - it
     }
     ```
 
-    ==corejs== - release version of the library (first number in version)
-    ==useBuiltIns== - with set to "usage", it will add only polyfills for features we are using in our code (based on browser list)
-    ==modules== - by default it will convert all imports to CommonJS syntax (require), but we do not need it, as we will add Webpack soon
+    <p><strong>corejs</strong> - release version of the library (first number in version)</p>
+    <p><strong>useBuiltIns</strong> - with set to "usage", it will add only polyfills for features we are using in our code (based on browser list)</p>
+    <p><strong>modules</strong> - by default it will convert all imports to CommonJS syntax (require), but we do not need it, as we will add Webpack soon</p>
 
 Now we are good to go with Babel. Please note, that there are other presets that allow you to add the support of some other syntax as well (react, for example). You can combine several presets.
 
