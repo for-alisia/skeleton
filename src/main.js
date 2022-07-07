@@ -1,48 +1,72 @@
 // We want to finish with something like this:
-// import Log from './log';
-// import Calc from './calc';
+// import Item from './item';
+// import Collection from './collection';
 // import img from './assets/webpack.png';
 // import './css/main.css';
 
 // We want to have this class as separate module
-class Calc {
-  add(...args) {
-    return args.reduce((sum, elem) => sum + elem, 0);
+class Item {
+  constructor(title, description, img) {
+    this.title = title;
+    this.description = description;
+    this.img = img;
   }
 
-  partial(x, y) {
-    return x * y;
+  createImg() {
+    const img = document.createElement('img');
+    img.src = this.image;
+    this.wrapper?.appendChild(img);
+
+    return this;
   }
 
-  test = (msg = 'Hello!') => {
-    console.log(msg);
-  };
+  createHeading() {
+    const heading = document.createElement('h3');
+    heading.textContent = this.title;
+    this.wrapper?.appendChild(heading);
+
+    return this;
+  }
+
+  createDescription() {
+    const description = document.createElement('p');
+    description.textContent = this.description;
+    this.wrapper?.appendChild(description);
+
+    return this;
+  }
+
+  render() {
+    this.wrapper = document.createElement('li');
+    this.createHeading().createDescription().createImg();
+
+    return this.wrapper;
+  }
 }
 
 // This class should be a separate module as well
-class Log {
-  log(msg) {
-    console.log('=========');
-    console.log(msg);
-    console.log('=========');
+class Collection {
+  constructor(items) {
+    this.items = items.flat();
+  }
+
+  renderCollection(parent) {
+    if (!this.items) {
+      console.log('Can not render on empty collection!');
+    }
+
+    const list = document.createElement('ul');
+
+    this.items.forEach((item) => {
+      list.appendChild(item.render());
+    });
+
+    parent.appendChild(list);
   }
 }
 
-const log = new Log();
-const calc = new Calc();
-
-const result = calc.add(1, 2, 3);
-
-log.log(calc.add(1, 2, 3));
+const webpack = new Item('Webpack', 'The most popular JS bundler');
+const collection = new Collection([webpack]);
 
 const root = document.getElementById('root');
-root?.textContent = `The result is ${result}`;
-
-const image = document.createElement('img');
-image.src = img;
-document.body.appendChild(image);
-
-calc.test();
-const withSeven = calc.partial(?, 7);
-
-log.log(withSeven(2));
+collection.renderCollection(root);
