@@ -544,7 +544,7 @@ Webpack - a bundler that can build projects. By default it can work only with js
     // We need to export a function that returns our config
     module.exports = (_, argv) => {
       // Let's get in what mode we are
-      const isProd = argv.mode === 'production' ? true : false;
+      const isProd = argv.mode === 'production';
       // Return loaders for styles based on the mode
       const getStyleLoaders = () => [
         isProd ? MiniCssExtractPlugin.loader : 'style-loader',

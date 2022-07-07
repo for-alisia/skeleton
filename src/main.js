@@ -6,6 +6,8 @@
 
 // We want to have this class as separate module
 class Item {
+  wrapper = null;
+
   constructor(title, description, img) {
     this.title = title;
     this.description = description;
@@ -15,6 +17,7 @@ class Item {
   createImg() {
     const img = document.createElement('img');
     img.src = this.img;
+    img.width = 200;
     this.wrapper?.appendChild(img);
 
     return this;
@@ -52,7 +55,7 @@ class Collection {
 
   renderCollection(parent) {
     if (!this.items) {
-      console.log('Can not render on empty collection!');
+      console.log(`Can not render on empty collection: ${this.items}`);
     }
 
     const list = document.createElement('ul');
@@ -65,7 +68,7 @@ class Collection {
   }
 }
 
-const webpack = new Item('Webpack', 'The most popular JS bundler');
+const webpack = new Item('Webpack', 'The most popular JS bundler', '/src/assets/img/webpack.png');
 const collection = new Collection([webpack]);
 
 const root = document.getElementById('root');
