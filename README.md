@@ -442,13 +442,13 @@ Webpack - a bundler that can build projects. By default it can work only with js
         new HtmlWebpackPlugin({
           title: 'Example of config web app',
           buildTime: new Date().toISOString(),
-          template: 'public/index.html',
+          template: 'src/index.html',
         }),
       ],
     };
     ```
 
-    template - tells Webpack to take our html from public folder
+    template - tells Webpack to take our html from src folder
 
     Other fields can be used in html - to specify some additional info about your build. To use it let's modify index.html:
 
@@ -628,3 +628,33 @@ Webpack - a bundler that can build projects. By default it can work only with js
       };
     };
     ```
+
+---
+
+## ESLint
+
+1. Let's install eslint to our project. We use it to be sure that our code is formatted according the rules we agreed in our team. Docs can be found [here](https://eslint.org/docs/latest/user-guide/getting-started)
+
+   ```
+   npm install -D eslint
+   ```
+
+2. Let's create config file - <code>.eslintrc</code>
+
+3. We can use very popular config from Airbnb. It's very easy to install it and include in our project.
+
+   ```
+   npx install-peerdeps --dev eslint-config-airbnb-base
+   ```
+
+   <strong>Note:</strong> This config is for projects without React. For React projects you can use <code>npx install-peerdeps --dev eslint-config-airbnb</code>
+
+4. Now we need to modify our <code>.eslintrc</code>
+
+   ```json
+   {
+     "extends": ["airbnb-base"]
+   }
+   ```
+
+5. Next step is to install ESLint extension to your IDE (for VSCode it's [this one](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)). Don't forget to enable it and restart IDE.
