@@ -639,22 +639,45 @@ Webpack - a bundler that can build projects. By default it can work only with js
    npm install -D eslint
    ```
 
-2. Let's create config file - <code>.eslintrc</code>
-
-3. We can use very popular config from Airbnb. It's very easy to install it and include in our project.
+2. Now let's init and configure eslint:
 
    ```
-   npx install-peerdeps --dev eslint-config-airbnb-base
+   npm init @eslint/config
    ```
 
-   <strong>Note:</strong> This config is for projects without React. For React projects you can use <code>npx install-peerdeps --dev eslint-config-airbnb</code>
+   You will be promted with several questions.
 
-4. Now we need to modify our <code>.eslintrc</code>
+   - How would you like to use ESLint? - To check syntax, find problems, and enforce code style
+   - What type of modules does your project use? - JavaScript modules (import/export)
+   - Which framework does your project use? - none (if we do not use it, of course)
+   - Does your project use TypeScript? - No
+   - Where does your code run? - Browser
+   - How would you like to define a style for your project? - Use a popular style guide
+   - Which style guide do you want to follow? - Airbnb: https://github.com/airbnb/javascript
+   - What format do you want your config file to be in? - JSON
+   - Would you like to install them now with npm? - Yes
+
+   </br>
+
+   That's all. You'll get all packages installed and config file is ready.
+
+   </br>
+
+3. Next step is to install ESLint extension to your IDE (for VSCode it's [this one](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)). Don't forget to enable it and restart IDE.
+
+</br>
+
+4. Now let's configure ESLint to fix our errors on save:
+
+   Open <code>settings.json</code> under your Workspace and put there (.vscode -> settings.json if you do not have it):
 
    ```json
    {
-     "extends": ["airbnb-base"]
+     "editor.codeActionsOnSave": {
+       "source.fixAll.eslint": true
+     },
+     "eslint.validate": ["javascript"]
    }
    ```
 
-5. Next step is to install ESLint extension to your IDE (for VSCode it's [this one](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)). Don't forget to enable it and restart IDE.
+5. If you have Prettier as a default formatter - disable it for current project (or you can configure them to work together)
