@@ -176,3 +176,455 @@ Now we are good to go with Babel. Please note, that there are other presets that
 ---
 
 # Webpack
+
+Webpack - a bundler that can build projects. By default it can work only with js files, but by adding loaders and plugins we can expand it's functionality significantly. Official docs are [here](https://webpack.js.org/)
+
+1. Let's install <strong>Webpack</strong> in our project.
+
+   ```
+   npm install -D webpack webpack-cli
+   ```
+
+</br>
+
+2. Even without any configuration file we can start Webpack using command:
+
+   ```
+   npx webpack
+   ```
+
+   But we'll get a warning, that Webpack doesn't know what mode it should use. Usually we should specify at least 2 configurations - development and production.
+
+   </br>
+
+   For now let's add a flag to our command:
+
+   ```
+   npx webpack --mode development
+   ```
+
+   </br>
+
+3. Let's create <code>webpack.config.js</code> file, where we can create our configuration.
+
+   <i>It's a usual JS file, runtime is NodeJS, so we can use all Node features (for example path). And this file uses CommonJS syntax</i>
+
+   ```javascript
+   module.exports = {
+     mode: 'development',
+     entry: './src/main.js', // not nessesary
+     output: {
+       filename: './dist/main', // default setting
+     },
+   };
+   ```
+
+   You can read about <strong>entry</strong> [here](https://webpack.js.org/concepts/entry-points)
+
+   You can read about <strong>output</strong> [here](https://webpack.js.org/concepts/output)
+
+   Output and input have default settings and if we are ok with it we can not change them (just skip these options in the configuration file)
+
+4. Now we can run webpack using <code>npx webpack</code>, but let's add a script to <code>package.json</code>
+
+   ```json
+     "scripts": {
+       "start": "webpack"
+     }
+   ```
+
+   If we run <code>npm start</code>, it will buid our project in development mode (as we have it in config file)
+
+5. Let's install file-loader for other files (images, fonts).
+
+   ```
+   npm install -D file-loader
+   ```
+
+6. Then we need to change config file to explain Webpack what it should do and with what files
+
+   ```javascript
+   module.exports = {
+     mode: 'development',
+     module: {
+       rules: [
+         // Loading images
+         {
+           test: /\.(png|jpg|jpeg|gif|ico)$/, // regexp for file type
+           use: [
+             {
+               loader: 'file-loader', // what loader to use
+               options: {
+                 outputPath: 'images', // where to put images
+                 name: '[name]-[sha1:hash:7].[ext]', // how to change name for images
+               },
+             },
+           ],
+         },
+         // Loading fonts
+         {
+           test: /\.(ttf|otf|eot|woff|woff2)$/,
+           use: [
+             {
+               loader: 'file-loader',
+               options: {
+                 outputPath: 'fonts',
+                 name: '[name].[ext]',
+               },
+             },
+           ],
+         },
+       ],
+     },
+   };
+   ```
+
+7. Let's install loader for babel - to use our .babelrc we created before
+
+   ```
+   npm install -D babel-loader
+   ```
+
+   And add the rule to <code>webpack.config.js</code>
+
+   ```javascript
+   module.exports = {
+     mode: 'development',
+     module: {
+       rules: [
+         {
+           test: /\.js$/,
+           exclude: /node_modules/,
+           loader: 'babel-loader',
+         },
+         // Loading images
+         // ...
+         // Loading fonts
+         // ...
+       ],
+     },
+   };
+   ```
+
+   <i>We need to exclude node_modules as we do not want to convert files from libraries</i>
+
+   <strong>Note:</strong> we have 3 different possibilities to create a rule:
+
+   ```javascript
+   module.exports = {
+     module: {
+       rules: [
+         {
+           test: /\.js$/,
+           loader: 'babel-loader', // just with loader as a string
+         },
+       ],
+     },
+   };
+   ```
+
+   ```javascript
+   module.exports = {
+     module: {
+       rules: [
+         {
+           test: /\.js$/,
+           use: ['babel-loader'], // with use and array of strings
+         },
+       ],
+     },
+   };
+   ```
+
+   ```javascript
+   module.exports = {
+     module: {
+       rules: [
+         {
+           test: /\.js$/,
+           use: [
+             {
+               // with object - we can specify options
+               loader: 'babel-loader',
+               options: {},
+             },
+           ],
+         },
+       ],
+     },
+   };
+   ```
+
+8. Let's add loader for styles (we will need 2 loaders)
+
+   ```
+   npm install -D style-loader css-loader
+   ```
+
+   And then let's add them to our config file:
+
+   ```javascript
+   module.exports = {
+     module: {
+       rules: [
+         // Styles (CSS)
+         {
+           test: /\.(css)$/,
+           use: ['style-loader', 'css-loader'],
+         },
+       ],
+     },
+   };
+   ```
+
+   The order is important here - Webpack will start from the end - this way css-loader will create our css, style-loader will add it on the page (with style tag - it's very convenient for the development, but bad for production)
+
+9. If we want to add support of SCSS to our project:
+
+   Install loader and sass:
+
+   ```
+   npm install -D node-sass sass-loader
+   ```
+
+   Then configure the rule:
+
+   ```javascript
+   module.exports = {
+     module: {
+       rules: [
+         // Styles (SCSS/SASS)
+         {
+           test: /\.(s[ca]ss)$/,
+           use: ['style-loader', 'css-loader', 'sass-loader'],
+         },
+       ],
+     },
+   };
+   ```
+
+   Do not remove CSS rule - we can use it for CSS from libraries
+
+10. Now let's add plugins to our configuration. If loaders work with modules, plugins work with the whole project. They have different syntax to add them
+
+11. Let's add HTML plugin
+
+    ```
+    npm install -D html-webpack-plugin
+    ```
+
+    Plugins should be imported in config file:
+
+    ```javascript
+    const HtmlWebpackPlugin = require('html-webpack-plugin');
+    ```
+
+    And after let's add it to the <code>plugins</code> section in our config
+
+    ```javascript
+    module.exports = {
+      module: {
+        // your rules here...
+      },
+      plugins: [new HtmlWebpackPlugin()],
+    };
+    ```
+
+    By default HTMLWebpackPlugin doesn't copy our index.html to dist - it creates a new one in dist folder.
+    To change it we need to add config to the constructor:
+
+    ```javascript
+    module.exports = {
+      module: {
+        // your rules here...
+      },
+      plugins: [
+        new HtmlWebpackPlugin({
+          title: 'Example of config web app',
+          buildTime: new Date().toISOString(),
+          template: 'public/index.html',
+        }),
+      ],
+    };
+    ```
+
+    template - tells Webpack to take our html from public folder
+
+    Other fields can be used in html - to specify some additional info about your build. To use it let's modify index.html:
+
+    ```html
+    <div><%= htmlWebpackPlugin.options.buildTime %></div>
+    ```
+
+    In this block we'll see the time when we created build
+
+12. Let's add Dev Server to start our project
+
+    ```
+    npm install -D webpack-dev-server
+    ```
+
+    Now we need to change our script in <code>package.json</code>
+
+    ```json
+    "scripts": {
+      "start": "webpack-dev-server",
+      "build": "webpack --mode production"
+    }
+    ```
+
+    To start our project you need to run <code>npm start</code> and to build a project - <code>npm run build</code>
+
+13. Let's add some config options for our dev server to <code>webpack.config.js</code>
+
+    ```javascript
+    module.exports = {
+      module: {
+        // your rules here...
+      },
+      plugins: [
+        // your plugins
+      ],
+      devServer: {
+        open: true, // will open new tab in browser
+        port: 3333, // change the default port
+      },
+    };
+    ```
+
+    Dev Server has a lot of options. See details [here](https://webpack.js.org/configuration/dev-server/)
+
+14. For development and production we want to have different configs. For example, we do not want to add styles in html for production. Let's add plugin to add styles as css file
+
+    ```
+    npm install -D mini-css-extract-plugin
+    ```
+
+    And then add it to our plugins:
+
+    ```javascript
+    const HtmlWebpackPlugin = require('html-webpack-plugin');
+    const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+    module.exports = {
+      module: {
+        // your rules here...
+      },
+      plugins: [
+        new HtmlWebpackPlugin({
+          title: 'Example of config web app',
+          buildTime: new Date().toISOString(),
+          template: 'public/index.html',
+        }),
+        new MiniCssExtractPlugin({
+          filename: 'main-[hash:8].css',
+        }),
+      ],
+    };
+    ```
+
+    And to make it work we need to change <code>'style-loader'</code> in our rules to <code>MiniCssExtractPlugin.loader</code>
+
+15. Let's specify what config we need to use for development and for production. We can create separate files for each mode and then in our scripts add this config files:
+
+    ```json
+    "build": "webpack --config webpack.prod.config.js"
+    ```
+
+    But we can use 1 common file and check in what mode our webpack is now. First of all, we'll need to change our syntax in <code>webpack.config.js</code> to return not an object, but a function that returns an object. This function will get args, and we will be able to get our mode from there.
+
+    </br>
+
+    The whole file can look like this:
+
+    ```javascript
+    const HtmlWebpackPlugin = require('html-webpack-plugin');
+    const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+    // We need to export a function that returns our config
+    module.exports = (_, argv) => {
+      // Let's get in what mode we are
+      const isProd = argv.mode === 'production' ? true : false;
+      // Return loaders for styles based on the mode
+      const getStyleLoaders = () => [
+        isProd ? MiniCssExtractPlugin.loader : 'style-loader',
+        'css-loader',
+      ];
+      // We need extract-css plugin only for prod
+      const getPlugins = () => {
+        const plugins = [
+          new HtmlWebpackPlugin({
+            title: 'Example of config web app',
+            buildTime: new Date().toISOString(),
+            template: 'public/index.html',
+          }),
+        ];
+
+        if (isProd) {
+          plugins.push(
+            new MiniCssExtractPlugin({
+              filename: 'main-[hash:8].css',
+            })
+          );
+        }
+
+        return plugins;
+      };
+
+      return {
+        mode: isProd ? 'production' : 'development',
+        output: {
+          filename: isProd ? 'main-[hash:8].js' : undefined,
+        },
+        module: {
+          rules: [
+            {
+              test: /\.js$/,
+              exclude: /node_modules/,
+              loader: 'babel-loader',
+            },
+            // Styles (CSS)
+            {
+              test: /\.(css)$/,
+              use: getStyleLoaders(),
+            },
+            // Styles (SCSS/SASS)
+            {
+              test: /\.(s[ca]ss)$/,
+              use: [...getStyleLoaders(), 'sass-loader'],
+            },
+            // Loading images
+            {
+              test: /\.(png|jpg|jpeg|gif|ico)$/,
+              use: [
+                {
+                  loader: 'file-loader',
+                  options: {
+                    outputPath: 'images',
+                    name: '[name]-[sha1:hash:7].[ext]',
+                  },
+                },
+              ],
+            },
+            // Loading fonts
+            {
+              test: /\.(ttf|otf|eot|woff|woff2)$/,
+              use: [
+                {
+                  loader: 'file-loader',
+                  options: {
+                    outputPath: 'fonts',
+                    name: '[name].[ext]',
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        plugins: getPlugins(),
+        devServer: {
+          open: true,
+        },
+      };
+    };
+    ```
