@@ -1,7 +1,7 @@
 // We want to finish with something like this:
 // import Item from './item';
 // import Collection from './collection';
-// import img from './assets/webpack.png';
+// import img from './assets/img/webpack.png';
 // import './css/main.css';
 
 // We want to have this class as separate module
@@ -14,7 +14,7 @@ class Item {
 
   createImg() {
     const img = document.createElement('img');
-    img.src = this.image;
+    img.src = this.img;
     this.wrapper?.appendChild(img);
 
     return this;

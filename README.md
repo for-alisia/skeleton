@@ -121,7 +121,7 @@ Let's add Babel to the project. Babel allows us to use the latest ES syntax - it
    }
    ```
 
-   <strong>Or</strong> we can create <strong>.browserslist</strong> file and put the list of browsers there (<i>I like this approach more</i>)
+   <strong>Or</strong> we can create <strong>.browserslistrc</strong> file and put the list of browsers there (<i>I like this approach more</i>)
 
    ```
     > 0.5%
